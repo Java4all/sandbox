@@ -79,9 +79,9 @@ ENTRYPOINT ["/sbin/tini", "--", "/usr/local/bin/jenkins.sh"]
 
 # from a derived Dockerfile, can use `RUN plugins.sh active.txt` to setup /usr/share/jenkins/ref/plugins from a support bundle
 # COPY plugins.sh /usr/local/bin/plugins.sh
-USER jenkins
-COPY install-plugins.sh /usr/local/bin/install-plugins.sh
 
+COPY install-plugins.sh /usr/local/bin/install-plugins.sh
+RUN chown -R ${user} /usr/local/bin
 # Add/Remove  the plugins you want
    RUN /usr/local/bin/install-plugins.sh \
    dashboard-view:2.9.10 \
@@ -120,3 +120,5 @@ COPY install-plugins.sh /usr/local/bin/install-plugins.sh
 # Create build file structure
    RUN mkdir -p "$JENKINS_HOME"/jobs/${job_name_2}/latest/
    RUN mkdir -p "$JENKINS_HOME"/jobs/${job_name_2}/builds/1/
+
+RUN chown -R ${user} "$JENKINS_HOME"
